@@ -29,23 +29,39 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/register")//Registro de Usuario
-    public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserRegisterRequest userCreateRequest) throws MessagingException, UnsupportedEncodingException {
+    // Endpoint para registro de usuário
+    @PostMapping("/register")
+    public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserRegisterRequest userCreateRequest)
+            throws MessagingException, UnsupportedEncodingException {
+
+        // Converte o request de criação de usuário em um modelo de entidade User
         User user = userCreateRequest.toModel();
+
+        // Chama o serviço para registrar o usuário no sistema e salvar os dados no banco
         UserResponse userSaved = userService.registerUser(user);
+
+        // Retorna a resposta HTTP com status 200 (OK) e o usuário registrado no corpo da resposta
         return ResponseEntity.ok().body(userSaved);
     }
+
+    // Endpoint para verificação de usuário através de um código enviado por e-mail
     @GetMapping("/verify")
-    public String verifyUser(@Param("code") String code){
-        if(userService.verify(code)){
+    public String verifyUser(@Param("code") String code) {
+        // Verifica o código enviado, se for válido retorna uma mensagem de sucesso
+        if (userService.verify(code)) {
             return "verify_success";
         } else {
+            // Se o código não for válido, retorna uma mensagem de falha
             return "verify_fail";
         }
     }
+
+    // Endpoint de teste para verificar se o usuário está logado
     @GetMapping("/teste")
-    public String teste(){
+    public String teste() {
+        // Retorna uma mensagem simples indicando que o usuário está logado
         return "você está logado";
     }
 
 }
+

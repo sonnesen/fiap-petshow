@@ -4,13 +4,16 @@ public enum UserRole {
     ADMIN("admin"),
     USER("user");
 
+    // Campo que armazena o nome da função (role)
     private String role;
 
-    UserRole(String role){
-        this.role= role;
+    // Construtor da enumeração que associa uma string ao enum
+    UserRole(String role) {
+        this.role = role;
     }
 
-    public String getRole(){
+    // Método que retorna o nome da função associada ao enum
+    public String getRole() {
         return role;
     }
 }

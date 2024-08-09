@@ -14,16 +14,18 @@ import java.io.UnsupportedEncodingException;
 public class MailService {
 
     @Autowired
-    private JavaMailSender emailSender;
+    private JavaMailSender emailSender; // Injeta o JavaMailSender, que é usado para enviar e-mails
 
-    private String verifyURL = "http://localhost:8080/user/verify?code=";
+    private String verifyURL = "http://localhost:8080/user/verify?code="; // URL base para o link de verificação
 
+    // Método para enviar um e-mail de verificação para o usuário
     public void sendVerificationEmail(User user) throws MessagingException, UnsupportedEncodingException {
-        String toAddres = user.getEmail();
-        String fromAddres = "samuelisidorio2@gmail.com";
-        String senderName = "PetShop";
-        String subject = "Please verify your registration";
+        String toAddress = user.getEmail(); // Endereço de e-mail do destinatário
+        String fromAddress = "samuelisidorio2@gmail.com"; // Endereço de e-mail do remetente
+        String senderName = "PetShop"; // Nome do remetente
+        String subject = "Please verify your registration"; // Assunto do e-mail
 
+        // Corpo do e-mail em HTML
         String content = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional //EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n" +
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n" +
                 "\n" +
@@ -411,21 +413,34 @@ public class MailService {
                 "\n" +
                 "</html>";
 
+        // Cria uma nova mensagem MIME
         MimeMessage message = emailSender.createMimeMessage();
+
+        // Usa MimeMessageHelper para configurar a mensagem MIME
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom(fromAddres, senderName);
-        helper.setTo(toAddres);
+        // Define o endereço de e-mail do remetente e o nome do remetente
+        helper.setFrom(fromAddress, senderName);
+
+        // Define o endereço de e-mail do destinatário
+        helper.setTo(toAddress);
+
+        // Define o assunto do e-mail
         helper.setSubject(subject);
 
+        // Substitui o marcador [[NAME]] no conteúdo do e-mail pelo nome do usuário
         content = content.replace("[[NAME]]", user.getName());
 
+        // Constrói a URL completa para a verificação do e-mail usando o código de verificação do usuário
         String verifyURL = this.verifyURL + user.getVerificationCode();
 
+        // Substitui o marcador [[URL]] no conteúdo do e-mail pela URL de verificação completa
         content = content.replace("[[URL]]", verifyURL);
 
+        // Define o conteúdo do e-mail, com HTML habilitado
         helper.setText(content, true);
 
+        // Envia a mensagem
         emailSender.send(message);
 
     }

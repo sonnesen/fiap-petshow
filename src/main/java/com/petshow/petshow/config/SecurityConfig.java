@@ -13,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -21,27 +21,38 @@ public class SecurityConfig {
     @Autowired
     private SecurityFilter securityFilter;
 
+    // Configuração do filtro de segurança HTTP
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-
-        return httpSecurity.csrf(csrf -> csrf.disable())
+        return httpSecurity
+                // Desabilita a proteção CSRF (Cross-Site Request Forgery)
+                .csrf(csrf -> csrf.disable())
+                // Define a política de gerenciamento de sessão como STATELESS (sem estado)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests( authorize -> authorize
-                        .requestMatchers(HttpMethod.POST,"/api/v1/user/register").permitAll()
+                // Configura as autorizações para requisições HTTP
+                .authorizeHttpRequests(authorize -> authorize
+                        // Permite o acesso sem autenticação para o endpoint POST /api/v1/user/register
+                        .requestMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
+                        // Permite o acesso sem autenticação para o endpoint GET /api/v1/user/verify
                         .requestMatchers(HttpMethod.GET, "/api/v1/user/verify").permitAll()
+                        // Permite o acesso sem autenticação para o endpoint POST /api/v1/auth/login
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        // Exige autenticação para qualquer outra requisição
                         .anyRequest().authenticated()
-                ).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                )
+                // Adiciona o filtro de segurança customizado antes do filtro padrão UsernamePasswordAuthenticationFilter
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
+    // Configuração do gerenciador de autenticação
     @Bean
-    public AuthenticationManager authenticationManager
-            (AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-
+    // Bean para configurar o encoder de senha
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

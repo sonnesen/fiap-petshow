@@ -23,15 +23,21 @@ public class LoginController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    // Endpoint para login
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationRequest authenticationRequest){
+    public ResponseEntity login(@RequestBody AuthenticationRequest authenticationRequest) {
+        // Cria um token de autenticação a partir do e-mail e senha fornecidos na requisição
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
                 authenticationRequest.email(), authenticationRequest.password()
         );
+
+        // Autentica o usuário usando o AuthenticationManager
         var auth = authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken( (User) auth.getPrincipal());
+        // Gera um token JWT para o usuário autenticado
+        var token = tokenService.generateToken((User) auth.getPrincipal());
 
+        // Retorna o token JWT em uma resposta HTTP com status 200 (OK)
         return ResponseEntity.ok(new AuthenticationResponse(token));
     }
 }

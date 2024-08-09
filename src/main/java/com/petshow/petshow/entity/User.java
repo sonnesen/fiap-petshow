@@ -14,9 +14,10 @@ import java.util.Collection;
 @Entity(name = "users")
 @Table(name = "users")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column (name = "id", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     private String name;
@@ -31,6 +32,7 @@ public class User implements UserDetails {
 
     private String role;
 
+    // Construtor que inicializa todos os campos
     public User(Long id, String name, String email, String password, String verificationCode, boolean enabled) {
         this.id = id;
         this.name = name;
@@ -40,6 +42,7 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
+    // Construtor utilizado para criação de um novo usuário (não precisa do código de verificação nem do enabled)
     public User(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
@@ -47,36 +50,43 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+    // Construtor padrão sem argumentos, necessário para JPA
     public User() {
     }
 
+    // Método para retornar as autoridades (permissões) do usuário - ainda não implementado
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
         return null;
     }
 
+    // Método que retorna o e-mail como o nome de usuário
     @Override
     public String getUsername() {
         return email;
     }
 
+    // Indica que a conta do usuário não está expirada
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    // Indica que a conta do usuário não está bloqueada
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    // Indica que as credenciais do usuário (senha) não estão expiradas
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
+
+    // Indica se a conta do usuário está habilitada
     @Override
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return this.enabled;
     }
 }

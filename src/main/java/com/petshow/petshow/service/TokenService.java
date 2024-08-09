@@ -12,41 +12,55 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
+
 
 @Service
 public class TokenService {
     @Value("${jwt.secret}")
-    private String secret;
+    private String secret; // A chave secreta para assinar e verificar tokens JWT, injetada a partir do arquivo de propriedades
 
-    public String generateToken(User user){
+    // Método para gerar um token JWT para um usuário
+    public String generateToken(User user) {
         try {
+            // Cria um algoritmo de assinatura HMAC usando a chave secreta
             Algorithm algorithm = Algorithm.HMAC256(secret);
+
+            // Cria e assina um novo token JWT
             String token = JWT.create()
-                    .withIssuer("auth")
-                    .withSubject(user.getEmail())
-                    .withExpiresAt(ExpirationDate())
-                    .sign(algorithm);
-            return token;
-        }catch (JWTCreationException exception){
+                    .withIssuer("auth") // Define o emissor do token
+                    .withSubject(user.getEmail()) // Define o assunto do token como o e-mail do usuário
+                    .withExpiresAt(ExpirationDate()) // Define a data de expiração do token
+                    .sign(algorithm); // Assina o token usando o algoritmo HMAC
+
+            return token; // Retorna o token gerado
+        } catch (JWTCreationException exception) {
+            // Lança uma exceção em caso de falha na criação do token
             throw new RuntimeException("ERRO: Token não foi gerado", exception);
         }
     }
 
-    public String validateToken(String token){
-        try{
+    // Método para validar um token JWT e retornar o sujeito (e-mail do usuário)
+    public String validateToken(String token) {
+        try {
+            // Cria um algoritmo de assinatura HMAC usando a chave secreta
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            return  JWT.require(algorithm)
-                    .withIssuer("auth")
+
+            // Verifica o token usando o algoritmo e o emissor esperado
+            return JWT.require(algorithm)
+                    .withIssuer("auth") // Verifica o emissor do token
                     .build()
-                    .verify(token)
-                    .getSubject();
-        } catch (JWTVerificationException exception){
+                    .verify(token) // Verifica o token
+                    .getSubject(); // Retorna o sujeito do token (e-mail do usuário)
+        } catch (JWTVerificationException exception) {
+            // Lança uma exceção em caso de falha na verificação do token
             throw new RuntimeException("Token inválido");
         }
     }
 
+    // Método privado para calcular a data de expiração do token
     private Instant ExpirationDate() {
+        // Define a data de expiração como 5 minutos a partir do momento atual
         return LocalDateTime.now().plusMinutes(5).toInstant(ZoneOffset.of("-03:00"));
     }
 }
+
