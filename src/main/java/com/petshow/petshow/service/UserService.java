@@ -25,10 +25,11 @@ public class UserService {
 
 
     public UserResponse registerUser(User user) throws MessagingException, UnsupportedEncodingException {
+        //Se user for diferente de null - email ja existe se nao salva usuario
         if(userRepository.findByEmail(user.getEmail()) != null){
             throw new RuntimeException("This email already exists");
         } else {
-            String encodedPassword = passwordEncoder.encode(user.getPassword());
+            String encodedPassword = passwordEncoder.encode(user.getPassword()); //Senha criptografada
             user.setPassword(encodedPassword);
 
             String randomCode = RandomString.generateRandomString(64);

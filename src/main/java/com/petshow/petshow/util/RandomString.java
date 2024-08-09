@@ -2,9 +2,10 @@ package com.petshow.petshow.util;
 
 import java.security.SecureRandom;
 
+// Classe que gera codigo de identificacao aleatoriamente
 public class RandomString {
 
-    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"; //combinacao a ser usada para gerar o codigo
 
     public static String generateRandomString(int length){
         SecureRandom secureRandom = new SecureRandom();

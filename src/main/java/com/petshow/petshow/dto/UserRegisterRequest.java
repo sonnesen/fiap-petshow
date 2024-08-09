@@ -24,6 +24,6 @@ public record UserRegisterRequest (
 
     public User toModel(){
         return new User(name,email,password,role);
-    }
+    } //Preenche o objeto user com as infos
 
 }

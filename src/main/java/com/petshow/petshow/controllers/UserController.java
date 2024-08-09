@@ -5,6 +5,7 @@ import com.petshow.petshow.dto.UserResponse;
 import com.petshow.petshow.entity.User;
 import com.petshow.petshow.service.TokenService;
 import com.petshow.petshow.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -28,7 +29,7 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping("/register")
+    @PostMapping("/register")//Registro de Usuario
     public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserRegisterRequest userCreateRequest) throws MessagingException, UnsupportedEncodingException {
         User user = userCreateRequest.toModel();
         UserResponse userSaved = userService.registerUser(user);
