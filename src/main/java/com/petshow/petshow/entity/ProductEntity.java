@@ -14,11 +14,12 @@ public class ProductEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     private UUID idProduct;
     private String name;
     private String description;
     private BigDecimal value;
-    private String quantity;
+    private BigDecimal valorProduct;
 
     public UUID getIdProduct() {
         return idProduct;
@@ -33,14 +34,14 @@ public class ProductEntity implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this. name = name;
     }
 
-    public String getdescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setdescription(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -52,12 +53,12 @@ public class ProductEntity implements Serializable {
         this.value = value;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public BigDecimal getValorProduct() {
+        return valorProduct;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setValorProduct(BigDecimal valorProduct) {
+        this.valorProduct = valorProduct;
     }
+
 }
-

@@ -22,9 +22,9 @@ public class ProductController  {
 
     @PostMapping("/products")
     public ResponseEntity<ProductEntity> saveProduct(@RequestBody @Valid ProductRecordDto productRecordDto) {
-        var productDomain = new ProductEntity();
-        BeanUtils.copyProperties(productRecordDto, productDomain);
-        return ResponseEntity.status(HttpStatus.CREATED).body(productRepository.save(productDomain));
+        var ProductEntity = new ProductEntity();
+        BeanUtils.copyProperties(productRecordDto, ProductEntity);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productRepository.save(ProductEntity));
     }
 
     @GetMapping("/products")

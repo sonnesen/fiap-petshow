@@ -21,6 +21,7 @@ public class OrderController {
 
     @PostMapping("/orders")
     public ResponseEntity<OrderEntity> saveOrder(@RequestBody @Valid OrderRecordDto OrderRecordDto) {
+        //var OrderEntity = new OrderEntity();
         var OrderEntity = new OrderEntity();
         BeanUtils.copyProperties(OrderRecordDto, OrderEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body(OrderRepository.save(OrderEntity));
