@@ -22,7 +22,7 @@ public class MailService {
     public void sendVerificationEmail(User user) throws MessagingException, UnsupportedEncodingException {
 
         String toAddress = user.getEmail(); // Endereço de e-mail do destinatário
-        String fromAddress = "samuelisidorio2@gmail.com"; // Endereço de e-mail do remetente
+        String fromAddress = "petshow.fiap@gmail.com"; // Endereço de e-mail do remetente
         String senderName = "PetShop"; // Nome do remetente
         String subject = "Please verify your registration"; // Assunto do e-mail
 

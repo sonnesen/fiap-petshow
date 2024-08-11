@@ -35,7 +35,6 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Configura as autorizações para requisições HTTP
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("swagger-ui/**", "swagger-ui**", "/v3/api-docs/**", "/v3/api-docs**").permitAll()
                         // Permite o acesso sem autenticação para o endpoint POST /api/v1/user/register
