@@ -2,18 +2,20 @@ package com.petshow.petshow.entity;
 
 import com.petshow.petshow.infra.exeption.ValorPagoInsuficienteException;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity
 @Table(name = "tb_orders")
+@Builder
+@Getter
 public class OrderEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 @Column
@@ -30,26 +32,11 @@ public class OrderEntity implements Serializable {
     private LocalDateTime dataEmissao; // gerada automatico ao ser criado
     private LocalDateTime dataFinalizacao; // geraado automatico ao ser fechado
 
-
     @ManyToOne
     private ProductEntity productEntity;
 
     @Enumerated(EnumType.STRING)
     private StatusOrderEntity statusOrderEntity; // gerado automático em outros pontos
-
-
-    public OrderEntity (String name,
-                   ProductEntity productEntity,
-                   Double quantidade) {
-        this.name = name;
-        this.productEntity = productEntity;
-        this.quantidade = quantidade;
-         this.calculaTotal();
-    }
-
-    public OrderEntity() {
-
-    }
 
     public static Object getOrderEntity() {
         return null;
@@ -97,11 +84,9 @@ public class OrderEntity implements Serializable {
         return null;
     }
 
-
     public LocalDateTime getDataEmissao() {
         return LocalDateTime.now();
     }
-
 
     public StatusOrderEntity getStatusPedido() {
         return StatusOrderEntity.PAGOFINALIZADO;
@@ -115,13 +100,12 @@ public class OrderEntity implements Serializable {
         return 0;
     }
 
-
-       public Object getname() {
+    public Object getname() {
         return null;
     }
 
     public String getNomeProduto() {
         return null;
     }
-}
 
+}

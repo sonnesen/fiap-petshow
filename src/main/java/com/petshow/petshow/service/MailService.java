@@ -20,6 +20,7 @@ public class MailService {
 
     // Método para enviar um e-mail de verificação para o usuário
     public void sendVerificationEmail(User user) throws MessagingException, UnsupportedEncodingException {
+
         String toAddress = user.getEmail(); // Endereço de e-mail do destinatário
         String fromAddress = "samuelisidorio2@gmail.com"; // Endereço de e-mail do remetente
         String senderName = "PetShop"; // Nome do remetente

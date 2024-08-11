@@ -25,6 +25,7 @@ public class UserService {
 
     // Método para registrar um novo usuário
     public UserResponse registerUser(User user) throws MessagingException, UnsupportedEncodingException {
+
         // Verifica se já existe um usuário com o mesmo e-mail
         if(userRepository.findByEmail(user.getEmail()) != null){
             throw new RuntimeException("This email already exists"); // Lança uma exceção se o e-mail já estiver em uso
@@ -55,10 +56,12 @@ public class UserService {
             // Retorna a resposta do usuário
             return userResponse;
         }
+
     }
 
     // Método para verificar o código de verificação e ativar a conta do usuário
     public boolean verify(String verificationCode) {
+
         // Encontra o usuário pelo código de verificação
         User user = userRepository.findByVerificationCode(verificationCode);
 
@@ -74,6 +77,7 @@ public class UserService {
             // Retorna true indicando que a verificação foi bem-sucedida
             return true;
         }
+
     }
 
 }

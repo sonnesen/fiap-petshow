@@ -1,7 +1,7 @@
 package com.petshow.petshow.controllers;
 
-import com.petshow.petshow.entity.OrderEntity;
 import com.petshow.petshow.dto.OrderRecordDto;
+import com.petshow.petshow.entity.OrderEntity;
 import com.petshow.petshow.repository.OrderRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -15,35 +15,41 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController()
+@RequestMapping("/petshow/api/v1/order")
 public class OrderController {
     @Autowired
     OrderRepository OrderRepository;
 
-    @PostMapping("/orders")
+    @PostMapping
     public ResponseEntity<OrderEntity> saveOrder(@RequestBody @Valid OrderRecordDto OrderRecordDto) {
+
         //var OrderEntity = new OrderEntity();
         var OrderEntity = new OrderEntity();
         BeanUtils.copyProperties(OrderRecordDto, OrderEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body(OrderRepository.save(OrderEntity));
         //return ResponseEntity.status(HttpStatus.CREATED).body(OrderRepository.save(OrderEntity));
+
     }
 
-    @GetMapping("/orders")
+    @GetMapping
     public ResponseEntity<List<OrderEntity>> getAllOrders() {
+
         return ResponseEntity.status(HttpStatus.OK).body(OrderRepository.findAll());
 
     }
 
-    @GetMapping("/orders/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Object> getOneOrder(@PathVariable(value="id") UUID id){
+
         Optional<OrderEntity> OrdersO = OrderRepository.findById(id);
         if(OrdersO.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
         }
         return ResponseEntity.status(HttpStatus.OK).body(OrdersO.get());
+
     }
 
-    @PutMapping("/orders/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Object> updateOrder(@PathVariable(value="id") UUID id,
                                               @RequestBody @Valid OrderRecordDto OrderRecordDto) {
         Optional<OrderEntity> OrdersO = OrderRepository.findById(id);
@@ -53,17 +59,19 @@ public class OrderController {
         var OrderEntity = OrdersO.get();
         BeanUtils.copyProperties(OrderRecordDto, OrderEntity);
         return ResponseEntity.status(HttpStatus.OK).body(OrderRepository.save(OrderEntity));
+
     }
 
-    @DeleteMapping("/orders/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteOrder(@PathVariable(value="id") UUID id) {
+
         Optional<OrderEntity> OrdersO = OrderRepository.findById(id);
         if(OrdersO.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
         }
         OrderRepository.delete(OrdersO.get());
         return ResponseEntity.status(HttpStatus.OK).body("Order deleted.");
+
     }
+
 }
-
-

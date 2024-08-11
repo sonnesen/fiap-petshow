@@ -34,9 +34,4 @@ public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
     @Query("SELECT u FROM OrderEntity u WHERE u.valorTotalServico >= :valorPedido")
     Page<OrderEntity> findMaiorQue(@Param("valorPedido") BigDecimal valorPedido, Pageable paginacao);
 
-
-
-
-
-
 }

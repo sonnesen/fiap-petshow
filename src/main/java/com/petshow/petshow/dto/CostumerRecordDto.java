@@ -1,16 +1,12 @@
 package com.petshow.petshow.dto;
 
+import lombok.Builder;
 
-
-public record CostumerRecordDto(String customerName,
-                                String phoneNumber,
-                                String email,
-                                String primaryPet,
-                                String primaryPetSpecies) {
-
-
-
-
+@Builder
+public record CostumerRecordDto(
+        String customerName,
+        String phoneNumber,
+        String email,
+        String primaryPet,
+        String primaryPetSpecies) {
 }
-
-

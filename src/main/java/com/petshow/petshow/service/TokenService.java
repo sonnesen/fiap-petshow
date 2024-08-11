@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-
 @Service
 public class TokenService {
     @Value("${jwt.secret}")
@@ -21,6 +20,7 @@ public class TokenService {
 
     // Método para gerar um token JWT para um usuário
     public String generateToken(User user) {
+
         try {
             // Cria um algoritmo de assinatura HMAC usando a chave secreta
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -37,10 +37,12 @@ public class TokenService {
             // Lança uma exceção em caso de falha na criação do token
             throw new RuntimeException("ERRO: Token não foi gerado", exception);
         }
+
     }
 
     // Método para validar um token JWT e retornar o sujeito (e-mail do usuário)
     public String validateToken(String token) {
+
         try {
             // Cria um algoritmo de assinatura HMAC usando a chave secreta
             Algorithm algorithm = Algorithm.HMAC256(secret);
@@ -55,11 +57,15 @@ public class TokenService {
             // Lança uma exceção em caso de falha na verificação do token
             throw new RuntimeException("Token inválido");
         }
+
     }
 
     // Método privado para calcular a data de expiração do token
     private Instant ExpirationDate() {
+
         // Define a data de expiração como 5 minutos a partir do momento atual
         return LocalDateTime.now().plusMinutes(5).toInstant(ZoneOffset.of("-03:00"));
+
     }
+
 }

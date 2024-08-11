@@ -9,8 +9,6 @@ import java.util.UUID;
 
 public record OrderRegistrerEntity(
 
-
-
             @NotBlank
             String name,
 
@@ -22,11 +20,4 @@ public record OrderRegistrerEntity(
             @Digits(integer=4, fraction=0)
             double quantidade
 
-
-)
-
-{}
-
-
-
-
+){}

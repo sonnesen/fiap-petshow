@@ -42,11 +42,13 @@ public class UserController {
 
         // Retorna a resposta HTTP com status 200 (OK) e o usuário registrado no corpo da resposta
         return ResponseEntity.ok().body(userSaved);
+
     }
 
     // Endpoint para verificação de usuário através de um código enviado por e-mail
     @GetMapping("/verify")
     public String verifyUser(@Param("code") String code) {
+
         // Verifica o código enviado, se for válido retorna uma mensagem de sucesso
         if (userService.verify(code)) {
             return "verify_success";
@@ -54,13 +56,16 @@ public class UserController {
             // Se o código não for válido, retorna uma mensagem de falha
             return "verify_fail";
         }
+
     }
 
     // Endpoint de teste para verificar se o usuário está logado
     @GetMapping("/teste")
     public String teste() {
+
         // Retorna uma mensagem simples indicando que o usuário está logado
         return "você está logado";
+
     }
 
 }
