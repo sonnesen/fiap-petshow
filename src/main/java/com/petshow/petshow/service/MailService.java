@@ -16,7 +16,7 @@ public class MailService {
     @Autowired
     private JavaMailSender emailSender; // Injeta o JavaMailSender, que é usado para enviar e-mails
 
-    private String verifyURL = "http://localhost:8080/user/verify?code="; // URL base para o link de verificação
+    private String verifyURL = "http://localhost:8080/api/v1/user/verify?code="; // URL base para o link de verificação
 
     // Método para enviar um e-mail de verificação para o usuário
     public void sendVerificationEmail(User user) throws MessagingException, UnsupportedEncodingException {
