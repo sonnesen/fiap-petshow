@@ -2,9 +2,9 @@ package com.petshow.petshow.entity;
 
 public enum StatusOrderEntity {
 
-    ABERTO,
-    EMPROCESSO,
-    PGCONFIRMADO,
-    PAGOFINALIZADO,
-    REGISTRADO
+    OPENED,
+    IN_PROCESS,
+    CONFIRMED_PAYMENT,
+    PAYED,
+    REGISTERED
 }

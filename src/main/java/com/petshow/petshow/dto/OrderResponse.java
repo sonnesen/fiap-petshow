@@ -6,23 +6,19 @@ import lombok.Builder;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
 public record OrderResponse(
 
         UUID idOrder,
-        String name,
-        Double quantidade,
-        BigDecimal valorTotalServico,
-        BigDecimal valorPago,
-        BigDecimal troco,
-        LocalDateTime dataEmissao,
-        LocalDateTime dataFinalizacao,
-        ProductEntity productEntity,
-        StatusOrderEntity statusOrderEntity
+        Date orderDate,
+        String paymentMethod,
+        BigDecimal totalValue,
+        Date deliveryDate
 
 ) {
-
 
 }

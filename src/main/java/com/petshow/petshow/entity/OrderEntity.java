@@ -1,109 +1,89 @@
 package com.petshow.petshow.entity;
 
-import com.petshow.petshow.infra.exeption.ValorPagoInsuficienteException;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 
 @Entity
 @Table(name = "tb_orders")
 @Builder
+@Data
 @Getter
-@Setter
-public class OrderEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class OrderEntity{
 
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idOrder;
-    private String name;
-    private Double quantidade;
-    private BigDecimal valorTotalServico = BigDecimal.ZERO;
-    private BigDecimal valorPago = BigDecimal.ZERO;
-    private BigDecimal troco = BigDecimal.ZERO;
-    private LocalDateTime dataEmissao; // gerada automatico ao ser criado
-    private LocalDateTime dataFinalizacao; // geraado automatico ao ser fechado
+    private Date orderDate;
+    private String paymentMethod;
+    private BigDecimal totalValue;
+    private Date deliveryDate;
     @ManyToOne
-    private ProductEntity productEntity;
+    private ProductEntity productList;
     @Enumerated(EnumType.STRING)
-    private StatusOrderEntity statusOrderEntity; // gerado automático em outros pontos
+    private StatusOrderEntity Entity;
 
-    public static Object getOrderEntity() {
-        return null;
+    public UUID getIdOrder() {
+        return idOrder;
     }
 
-    public void calculaTotal() {
-        //this.valorTotalServico = pro.multiply(BigDecimal.valueOf(quantidade));
-
+    public void setIdOrder(UUID idOrder) {
+        this.idOrder = idOrder;
     }
 
-    public BigDecimal calcularTroco(BigDecimal valorPago) throws ValorPagoInsuficienteException {
-        if (valorPago.compareTo(this.valorTotalServico) == -1) {
-            this.troco = BigDecimal.ZERO;
-            throw new ValorPagoInsuficienteException("O valor pago R$: " + valorPago + " é menor que o total do serviço R$: " + this.valorTotalServico);
-        } else if (valorPago.compareTo(this.valorTotalServico) == 0) {
-            this.troco = BigDecimal.ZERO;
-            this.valorPago = valorPago;
-            this.statusOrderEntity = StatusOrderEntity.PAGOFINALIZADO;
-        } else if (valorPago.compareTo(this.valorTotalServico) == 1) {
-            this.troco = valorPago.subtract(this.valorTotalServico);
-            this.valorPago = valorPago;
-            this.statusOrderEntity = StatusOrderEntity.PAGOFINALIZADO;
-        }
-        System.out.println(troco);
-        return this.troco;
+    public Date getOrderDate() {
+        return orderDate;
     }
 
-    public Object map(Object aNew) {
-        return null;
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 
-    public Long getId() {
-        return null;
+    public String getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public String getNomeCliente() {
-        return null;
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
-    public Object getProduto() {
-        return null;
+    public BigDecimal getTotalValue() {
+        return totalValue;
     }
 
-    public BigDecimal getValorTotalServico() {
-        return null;
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
     }
 
-    public LocalDateTime getDataEmissao() {
-        return LocalDateTime.now();
+    public Date getDeliveryDate() {
+        return deliveryDate;
     }
 
-    public StatusOrderEntity getStatusPedido() {
-        return StatusOrderEntity.PAGOFINALIZADO;
+    public void setDeliveryDate(Date deliveryDate) {
+        this.deliveryDate = deliveryDate;
     }
 
-    public LocalDateTime getDataFinalizacao() {
-        return null;
+    public ProductEntity getProductList() {
+        return productList;
     }
 
-    public double getQuantidade() {
-        return 0;
+    public void setProductList(ProductEntity productList) {
+        this.productList = productList;
     }
 
-    public String getname() {
-        return null;
+    public StatusOrderEntity getEntity() {
+        return Entity;
     }
 
-    public String getNomeProduto() {
-        return null;
+    public void setEntity(StatusOrderEntity entity) {
+        Entity = entity;
     }
-
 }

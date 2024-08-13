@@ -10,6 +10,6 @@ public interface CostumerMapper {
 
     CostumerEntity toCostumerEntity(CostumerRequest request);
 
-    CostumerResponse toCostumerResponse(CostumerEntity entity);
+    CostumerResponse toCostumerResponse(CostumerEntity costumerEntity);
 
 }
