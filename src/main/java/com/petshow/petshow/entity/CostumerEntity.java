@@ -1,18 +1,20 @@
 package com.petshow.petshow.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.UUID;
 
-@Entity
 @Table(name = "tb_costumer")
 @Builder
-public class CostumerEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Entity
+public class CostumerEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

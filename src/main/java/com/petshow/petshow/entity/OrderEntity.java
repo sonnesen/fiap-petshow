@@ -2,39 +2,37 @@ package com.petshow.petshow.entity;
 
 import com.petshow.petshow.infra.exeption.ValorPagoInsuficienteException;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@EqualsAndHashCode(of = "id")
+
 @Entity
 @Table(name = "tb_orders")
 @Builder
 @Getter
+@Setter
 public class OrderEntity implements Serializable {
     private static final long serialVersionUID = 1L;
-@Column
+
+    @Column
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID idOrder;
     private String name;
     private Double quantidade;
-
     private BigDecimal valorTotalServico = BigDecimal.ZERO;
     private BigDecimal valorPago = BigDecimal.ZERO;
     private BigDecimal troco = BigDecimal.ZERO;
-
     private LocalDateTime dataEmissao; // gerada automatico ao ser criado
     private LocalDateTime dataFinalizacao; // geraado automatico ao ser fechado
-
     @ManyToOne
     private ProductEntity productEntity;
-
     @Enumerated(EnumType.STRING)
     private StatusOrderEntity statusOrderEntity; // gerado automático em outros pontos
 
@@ -43,15 +41,15 @@ public class OrderEntity implements Serializable {
     }
 
     public void calculaTotal() {
-       //this.valorTotalServico = pro.multiply(BigDecimal.valueOf(quantidade));
+        //this.valorTotalServico = pro.multiply(BigDecimal.valueOf(quantidade));
 
     }
 
-     public BigDecimal calcularTroco(BigDecimal valorPago) throws ValorPagoInsuficienteException {
+    public BigDecimal calcularTroco(BigDecimal valorPago) throws ValorPagoInsuficienteException {
         if (valorPago.compareTo(this.valorTotalServico) == -1) {
             this.troco = BigDecimal.ZERO;
             throw new ValorPagoInsuficienteException("O valor pago R$: " + valorPago + " é menor que o total do serviço R$: " + this.valorTotalServico);
-        }  else if (valorPago.compareTo(this.valorTotalServico) == 0) {
+        } else if (valorPago.compareTo(this.valorTotalServico) == 0) {
             this.troco = BigDecimal.ZERO;
             this.valorPago = valorPago;
             this.statusOrderEntity = StatusOrderEntity.PAGOFINALIZADO;
@@ -100,7 +98,7 @@ public class OrderEntity implements Serializable {
         return 0;
     }
 
-    public Object getname() {
+    public String getname() {
         return null;
     }
 

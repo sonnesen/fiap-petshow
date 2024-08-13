@@ -3,7 +3,7 @@ package com.petshow.petshow.dto;
 import lombok.Builder;
 
 @Builder
-public record CostumerRecordDto(
+public record CostumerRequest(
         String customerName,
         String phoneNumber,
         String email,

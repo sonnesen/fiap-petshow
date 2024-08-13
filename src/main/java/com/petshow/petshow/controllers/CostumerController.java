@@ -1,77 +1,89 @@
 package com.petshow.petshow.controllers;
 
-import com.petshow.petshow.entity.CostumerEntity;
-import com.petshow.petshow.dto.CostumerRecordDto;
-import com.petshow.petshow.repository.CostumerRepository;
+import com.petshow.petshow.dto.CostumerRequest;
+import com.petshow.petshow.dto.CostumerResponse;
+import com.petshow.petshow.exception.CostumerNotFoundException;
+import com.petshow.petshow.mapper.CostumerMapper;
+import com.petshow.petshow.service.CostumerService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-@RequiredArgsConstructor
+import static org.springframework.http.ResponseEntity.*;
+
 @RestController
-@RequestMapping("/petshow/api/v1")
+@RequestMapping("/petshow/api/v1/costumer")
+@Tag(name = "petshow/api/v1/costumer", description = "Api for costumer")
 public class CostumerController {
 
     @Autowired
-    private final CostumerRepository costumerRepository;
+    private CostumerService service;
+    @Autowired
+    private CostumerMapper mapper;
 
-    @PostMapping("/costumer")
-    public ResponseEntity<CostumerEntity> saveCostumer(@RequestBody @Valid CostumerRecordDto costumerRecordDto) {
 
-        var CostumerEntity = com.petshow.petshow.entity.CostumerEntity.builder().build();
-        BeanUtils.copyProperties(costumerRecordDto, CostumerEntity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(costumerRepository.save(CostumerEntity));
+    @PostMapping
+    @Operation(summary = "Summary", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Criado com sucesso.")
+    })
+    public ResponseEntity<CostumerResponse> saveCostumer(@RequestBody @Valid CostumerRequest costumerRequest) {
+
+        var costumerResponse = mapper.toCostumerResponse(service.saveCostumer(costumerRequest));
+        return status(HttpStatus.CREATED).body(costumerResponse);
 
     }
 
-    @GetMapping("/costumer")
-    public ResponseEntity<List<CostumerEntity>> getAllCostumer() {
+    @GetMapping
+    public ResponseEntity<List<CostumerResponse>> getAllCostumer() {
 
-        return ResponseEntity.status(HttpStatus.OK).body(costumerRepository.findAll());
+        var allCostumer = service.getAllCostumer()
+                .stream().map(mapper::toCostumerResponse).toList();
+        return ok(allCostumer);
 
     }
 
-    @GetMapping("/costumer/{id}")
-    public ResponseEntity<Object> getOneCostumer(@PathVariable(value="id") UUID id){
+    @GetMapping("/{id}")
+    public ResponseEntity<CostumerResponse> getOneCostumer(@PathVariable(value = "id") UUID id) {
 
-        Optional<CostumerEntity> costumerO = costumerRepository.findById(id);
-        if(costumerO.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Costumer not found.");
+        var costumer = service.getCostumer(id);
+        return ok(mapper.toCostumerResponse(costumer));
+
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateCostumer(@PathVariable(value = "id") UUID id,
+                                                 @RequestBody @Valid CostumerRequest costumerRequest) {
+
+        var costumer = service.updateCostumer(id, costumerRequest);
+        return ok(mapper.toCostumerResponse(costumer));
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCostumer(@PathVariable(value = "id") UUID id) {
+
+        try {
+            service.deleteCostumer(id);
+        } catch (Exception exception) {
+            return notFound().build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(costumerO.get());
+        return noContent().build();
 
     }
 
-    @PutMapping("/costumer/{id}")
-    public ResponseEntity<Object> updateCostumer(@PathVariable(value="id") UUID id,
-                                                 @RequestBody @Valid CostumerRecordDto productRecordDto) {
-        Optional<CostumerEntity> costumerO = costumerRepository.findById(id);
-        if(costumerO.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found.");
-        }
-        var productModel = costumerO.get();
-        BeanUtils.copyProperties(productRecordDto, productModel);
-        return ResponseEntity.status(HttpStatus.OK).body(costumerRepository.save(productModel));
-
-    }
-
-    @DeleteMapping("/costumer/{id}")
-    public ResponseEntity<Object> deleteCostumer(@PathVariable(value="id") UUID id) {
-        Optional<CostumerEntity> costumerO = costumerRepository.findById(id);
-        if(costumerO.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Costumer not found.");
-        }
-        costumerRepository.delete(costumerO.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Costumer deleted.");
-
+    @ExceptionHandler(CostumerNotFoundException.class)
+    public ResponseEntity<String> handleCostumerNotFoundException(CostumerNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
 }

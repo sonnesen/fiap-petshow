@@ -3,25 +3,24 @@ package com.petshow.petshow.controllers;
 import com.petshow.petshow.dto.AuthenticationRequest;
 import com.petshow.petshow.dto.AuthenticationResponse;
 import com.petshow.petshow.entity.User;
+import com.petshow.petshow.exception.UserAlreadyExistsException;
+import com.petshow.petshow.exception.UserNotFoundException;
 import com.petshow.petshow.service.TokenService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1/auth")
 public class LoginController {
 
-    private final TokenService tokenService;
-
-    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private TokenService tokenService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     // Endpoint para login
     @PostMapping("/login")
@@ -41,6 +40,16 @@ public class LoginController {
         // Retorna o token JWT em uma resposta HTTP com status 200 (OK)
         return ResponseEntity.ok(new AuthenticationResponse(token));
 
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<String> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
 }

@@ -1,77 +1,82 @@
 package com.petshow.petshow.controllers;
 
-import com.petshow.petshow.dto.OrderRecordDto;
-import com.petshow.petshow.entity.OrderEntity;
-import com.petshow.petshow.repository.OrderRepository;
+import com.petshow.petshow.dto.OrderRequest;
+import com.petshow.petshow.dto.OrderResponse;
+import com.petshow.petshow.exception.OrderNotFoundException;
+import com.petshow.petshow.mapper.OrderMapper;
+import com.petshow.petshow.service.OrderService;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-@RestController()
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.ResponseEntity.*;
+
+@RestController
 @RequestMapping("/petshow/api/v1/order")
 public class OrderController {
+
     @Autowired
-    OrderRepository OrderRepository;
+    private OrderService service;
+    @Autowired
+    private OrderMapper mapper;
 
     @PostMapping
-    public ResponseEntity<OrderEntity> saveOrder(@RequestBody @Valid OrderRecordDto OrderRecordDto) {
+    public ResponseEntity<OrderResponse> saveOrder(@RequestBody @Valid OrderRequest orderRequest) {
 
-        //var OrderEntity = new OrderEntity();
-        var OrderEntity = new OrderEntity();
-        BeanUtils.copyProperties(OrderRecordDto, OrderEntity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(OrderRepository.save(OrderEntity));
-        //return ResponseEntity.status(HttpStatus.CREATED).body(OrderRepository.save(OrderEntity));
+        var orderResponse = mapper.toOrderResponse(service.saveOrder(orderRequest));
+        return ok(orderResponse);
 
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderEntity>> getAllOrders() {
+    public ResponseEntity<List<OrderResponse>> getAllOrders() {
 
-        return ResponseEntity.status(HttpStatus.OK).body(OrderRepository.findAll());
+        var orderEntityList = service.getAllOrders();
+        var orderResponseList = orderEntityList.stream().map(mapper::toOrderResponse).toList();
+
+        return status(OK).body(orderResponseList);
 
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOneOrder(@PathVariable(value="id") UUID id){
+    public ResponseEntity<OrderResponse> getOrder(@PathVariable(value = "id") UUID id) {
 
-        Optional<OrderEntity> OrdersO = OrderRepository.findById(id);
-        if(OrdersO.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(OrdersO.get());
+        var order = service.getOrder(id);
+        return ok(mapper.toOrderResponse(order));
 
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateOrder(@PathVariable(value="id") UUID id,
-                                              @RequestBody @Valid OrderRecordDto OrderRecordDto) {
-        Optional<OrderEntity> OrdersO = OrderRepository.findById(id);
-        if(OrdersO.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("orders not found.");
-        }
-        var OrderEntity = OrdersO.get();
-        BeanUtils.copyProperties(OrderRecordDto, OrderEntity);
-        return ResponseEntity.status(HttpStatus.OK).body(OrderRepository.save(OrderEntity));
+    public ResponseEntity<OrderResponse> updateOrder(@PathVariable(value = "id") UUID id,
+                                                     @RequestBody @Valid OrderRequest orderRequest) {
+
+        var order = service.updateOrder(id, orderRequest);
+        return ok(mapper.toOrderResponse(order));
 
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteOrder(@PathVariable(value="id") UUID id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable(value = "id") UUID id) {
 
-        Optional<OrderEntity> OrdersO = OrderRepository.findById(id);
-        if(OrdersO.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found.");
+        try {
+            service.deleteOrder(id);
+        } catch (Exception exception) {
+            return notFound().build();
         }
-        OrderRepository.delete(OrdersO.get());
-        return ResponseEntity.status(HttpStatus.OK).body("Order deleted.");
 
+        return noContent().build();
+
+    }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<String> handleOrderNotFoundException(OrderNotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
 }

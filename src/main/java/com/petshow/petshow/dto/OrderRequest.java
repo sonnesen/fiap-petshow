@@ -1,9 +1,12 @@
 package com.petshow.petshow.dto;
 
+import lombok.Builder;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-public record OrderRecordDto(
+@Builder
+public record OrderRequest(
         Date orderDate,
         String paymentMethod,
         BigDecimal valorTotal,
