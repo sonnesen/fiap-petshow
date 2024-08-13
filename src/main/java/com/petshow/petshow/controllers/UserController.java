@@ -5,6 +5,9 @@ import com.petshow.petshow.dto.UserResponse;
 import com.petshow.petshow.entity.User;
 import com.petshow.petshow.service.TokenService;
 import com.petshow.petshow.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,11 @@ public class UserController {
 
     // Endpoint para registro de usuário
     @PostMapping("/register")
+    @Operation(summary = "Register a new user", description = "Register a new user in the system")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User registered successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
     public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserRegisterRequest userCreateRequest)
             throws MessagingException, UnsupportedEncodingException {
 
@@ -46,6 +54,11 @@ public class UserController {
 
     // Endpoint para verificação de usuário através de um código enviado por e-mail
     @GetMapping("/verify")
+    @Operation(summary = "Verify user email", description = "Verify the user's email using the verification code")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Verification successful"),
+            @ApiResponse(responseCode = "400", description = "Invalid verification code")
+    })
     public String verifyUser(@Param("code") String code) {
         // Verifica o código enviado, se for válido retorna uma mensagem de sucesso
         if (userService.verify(code)) {
@@ -58,6 +71,7 @@ public class UserController {
 
     // Endpoint de teste para verificar se o usuário está logado
     @GetMapping("/teste")
+    @Operation(summary = "Test endpoint", description = "Endpoint to test if the user is logged in")
     public String teste() {
         // Retorna uma mensagem simples indicando que o usuário está logado
         return "você está logado";

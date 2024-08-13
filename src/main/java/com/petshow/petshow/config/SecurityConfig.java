@@ -1,6 +1,7 @@
 package com.petshow.petshow.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+
 
 @Configuration
 @EnableWebSecurity
@@ -37,7 +41,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/user/verify").permitAll()
                         // Permite o acesso sem autenticação para o endpoint POST /api/v1/auth/login
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        // Permite acesso à documentação do Swagger sem autenticação
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         // Exige autenticação para qualquer outra requisição
+                                .requestMatchers(HttpMethod.GET, "/api/v1/user/verify").permitAll()
                         .anyRequest().authenticated()
                 )
                 // Adiciona o filtro de segurança customizado antes do filtro padrão UsernamePasswordAuthenticationFilter
