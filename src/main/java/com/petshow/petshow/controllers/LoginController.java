@@ -6,6 +6,8 @@ import com.petshow.petshow.entity.User;
 import com.petshow.petshow.exception.UserAlreadyExistsException;
 import com.petshow.petshow.exception.UserNotFoundException;
 import com.petshow.petshow.service.TokenService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("petshow/api/v1/auth")
+@Tag(name = "petshow/api/v1/auth", description = "Controller responsável por gerenciar o login do usuário.")
+@RequiredArgsConstructor
 public class LoginController {
 
     @Autowired

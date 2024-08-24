@@ -5,6 +5,7 @@ import com.petshow.petshow.dto.OrderResponse;
 import com.petshow.petshow.exception.OrderNotFoundException;
 import com.petshow.petshow.mapper.OrderMapper;
 import com.petshow.petshow.service.OrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,13 +13,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequestMapping("/petshow/api/v1/order")
+@Tag(name = "petshow/api/v1/order", description = "Controller responsável por representar os pedidos de um usuário.")
 public class OrderController {
 
     @Autowired
@@ -45,7 +46,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponse> getOrder(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<OrderResponse> getOrder(@PathVariable(value = "id") Long id) {
 
         var order = service.getOrder(id);
         return ok(mapper.toOrderResponse(order));
@@ -53,7 +54,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderResponse> updateOrder(@PathVariable(value = "id") UUID id,
+    public ResponseEntity<OrderResponse> updateOrder(@PathVariable(value = "id") Long id,
                                                      @RequestBody @Valid OrderRequest orderRequest) {
 
         var order = service.updateOrder(id, orderRequest);
@@ -62,7 +63,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable(value = "id") Long id) {
 
         try {
             service.deleteOrder(id);

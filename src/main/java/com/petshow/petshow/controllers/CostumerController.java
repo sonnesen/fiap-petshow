@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.*;
 
@@ -53,7 +52,7 @@ public class CostumerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CostumerResponse> getOneCostumer(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<CostumerResponse> getOneCostumer(@PathVariable(value = "id") Long id) {
 
         var costumer = service.getCostumer(id);
         return ok(mapper.toCostumerResponse(costumer));
@@ -61,7 +60,7 @@ public class CostumerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> updateCostumer(@PathVariable(value = "id") UUID id,
+    public ResponseEntity<Object> updateCostumer(@PathVariable(value = "id") Long id,
                                                  @RequestBody @Valid CostumerRequest costumerRequest) {
 
         var costumer = service.updateCostumer(id, costumerRequest);
@@ -70,7 +69,7 @@ public class CostumerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCostumer(@PathVariable(value = "id") UUID id) {
+    public ResponseEntity<Void> deleteCostumer(@PathVariable(value = "id") Long id) {
 
         try {
             service.deleteCostumer(id);

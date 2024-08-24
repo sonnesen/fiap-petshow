@@ -6,5 +6,5 @@ public record ProductRequest(
         String name,
         String description,
         String quantity,
-        BigDecimal value) {
+        BigDecimal price) {
 }

@@ -8,19 +8,20 @@ import com.petshow.petshow.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("petshow/api/v1/user")
+@Tag(name = "petshow/api/v1/user", description = "Controller responsável por gerenciar o acesso do usuário.")
 public class UserController {
 
     @Autowired
