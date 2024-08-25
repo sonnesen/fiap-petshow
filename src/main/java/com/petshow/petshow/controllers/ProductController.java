@@ -7,6 +7,9 @@ import com.petshow.petshow.entity.ProductEntity;
 import com.petshow.petshow.exception.ProductNotFoundException;
 import com.petshow.petshow.mapper.ProductMapper;
 import com.petshow.petshow.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +23,19 @@ import static org.springframework.http.ResponseEntity.*;
 
 @RestController()
 @RequestMapping("/petshow/api/v1/product")
-@Tag(name = "petshow/api/v1/product", description = "Controller responsável por apresentar os produtos de uma compra.")
+@Tag(name = "petshow/api/v1/product", description = "Controller responsável por gerenciar os produtos de uma compra.")
 public class ProductController {
 
     @Autowired
     private ProductService service;
     @Autowired
-    ProductMapper mapper;
+    private ProductMapper mapper;
 
     @PostMapping
+    @Operation(summary = "Criar um produto", description = "Endpoint responsável por criar um novo produto.", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto criado com sucesso.")
+    })
     public ResponseEntity<ProductResponse> saveProduct(@RequestBody @Valid ProductRequest productRequest) {
 
         var productEntity = service.saveProduct(productRequest);
@@ -37,6 +44,10 @@ public class ProductController {
     }
 
     @GetMapping
+    @Operation(summary = "Obter todos produtos", description = "Endpoint responsável por obter uma lista de produtos.", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produtos obtidos com sucesso.")
+    })
     public ResponseEntity<List<ProductResponse>> getAllProducts() {
 
         List<ProductResponse> productResponseList = service.getAllProducts()
@@ -46,6 +57,10 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obter um produto", description = "Endpoint responsável por obter um produto.", method = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto obtido com sucesso.")
+    })
     public ResponseEntity<ProductResponse> getProduct(@PathVariable(value = "id") Long id) {
 
         ProductEntity product = service.getProduct(id);
@@ -54,6 +69,10 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Atualizar um produto", description = "Endpoint responsável por atualizar um produto existente.", method = "PUT")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto atualizado com sucesso.")
+    })
     public ResponseEntity<Object> updateProduct(@PathVariable(value = "id") Long id,
                                                 @RequestBody @Valid ProductRequest productRequest) {
 
@@ -63,6 +82,10 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Deletar um produto", description = "Endpoint responsável por deletar um produto existente.", method = "DELETE")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Produto deletado com sucesso.")
+    })
     public ResponseEntity<Void> deleteProduct(@PathVariable(value = "id") Long id) {
 
         try {

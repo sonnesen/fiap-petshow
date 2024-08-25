@@ -6,6 +6,9 @@ import com.petshow.petshow.entity.User;
 import com.petshow.petshow.exception.UserAlreadyExistsException;
 import com.petshow.petshow.exception.UserNotFoundException;
 import com.petshow.petshow.service.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,10 @@ public class LoginController {
 
     // Endpoint para login
     @PostMapping("/login")
+    @Operation(summary = "Efetuar login do usuário", description = "Endpoint responsável por efetuar o login de um usuario.", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login efetuado com sucesso.")
+    })
     public ResponseEntity login(@RequestBody AuthenticationRequest authenticationRequest) {
 
         // Cria um token de autenticação a partir do e-mail e senha fornecidos na requisição

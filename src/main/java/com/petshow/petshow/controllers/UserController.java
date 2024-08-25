@@ -35,10 +35,10 @@ public class UserController {
 
     // Endpoint para registro de usuário
     @PostMapping("/register")
-    @Operation(summary = "Register a new user", description = "Register a new user in the system")
+    @Operation(summary = "Registrar um novo usuario", description = "Endpoint responsável por criar um novo usuario")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "User registered successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid input")
+            @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Entrada inválida")
     })
     public ResponseEntity<UserResponse> registerUser(@RequestBody @Valid UserRegisterRequest userCreateRequest)
             throws MessagingException, UnsupportedEncodingException {
@@ -56,10 +56,10 @@ public class UserController {
 
     // Endpoint para verificação de usuário através de um código enviado por e-mail
     @GetMapping("/verify")
-    @Operation(summary = "Verify user email", description = "Verify the user's email using the verification code")
+    @Operation(summary = "Verificar email do usuario", description = "Endpoint responsavel por verificar o email do usuario a partir do codigo de verificação")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Verification successful"),
-            @ApiResponse(responseCode = "400", description = "Invalid verification code")
+            @ApiResponse(responseCode = "200", description = "Codigo verificado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Codigo de verificação inválido")
     })
     public String verifyUser(@Param("code") String code) {
 
@@ -74,13 +74,13 @@ public class UserController {
     }
 
     // Endpoint de teste para verificar se o usuário está logado
-    @GetMapping("/teste")
-    @Operation(summary = "Test endpoint", description = "Endpoint to test if the user is logged in")
-    public String teste() {
-
-        // Retorna uma mensagem simples indicando que o usuário está logado
-        return "você está logado";
-
-    }
+//    @GetMapping("/teste")
+//    @Operation(summary = "Test endpoint", description = "Endpoint to test if the user is logged in")
+//    public String teste() {
+//
+//        // Retorna uma mensagem simples indicando que o usuário está logado
+//        return "você está logado";
+//
+//    }
 
 }
