@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CostumerService {
@@ -29,21 +28,21 @@ public class CostumerService {
         return repository.findAll();
     }
 
-    public CostumerEntity getCostumer(UUID id) {
+    public CostumerEntity getCostumer(Long id) {
 
         return repository.findById(id)
                 .orElseThrow(() ->  new CostumerNotFoundException(String.format("Costumer '%s' not found.", id)));
 
     }
 
-    public CostumerEntity updateCostumer(UUID id, CostumerRequest request) {
+    public CostumerEntity updateCostumer(Long id, CostumerRequest request) {
 
         getCostumer(id);
         return saveCostumer(request);
 
     }
 
-    public void deleteCostumer(UUID id) {
+    public void deleteCostumer(Long id) {
         CostumerEntity costumer = getCostumer(id);
         repository.delete(costumer);
     }

@@ -4,38 +4,42 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.UUID;
 
 
-@Entity
-@Table(name = "tb_orders")
+@Entity(name = "orders")
+@Table(name = "orders")
 @Builder
 @Data
 @Getter
-public class OrderEntity{
+@Setter
+public class OrderEntity {
 
     @Column
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID idOrder;
+    private Long idOrder;
+    @Column
     private Date orderDate;
+    @Column
     private String paymentMethod;
+    @Column
     private BigDecimal totalValue;
+    @Column
     private Date deliveryDate;
     @ManyToOne
     private ProductEntity productList;
     @Enumerated(EnumType.STRING)
     private StatusOrderEntity Entity;
 
-    public UUID getIdOrder() {
+    public Long getIdOrder() {
         return idOrder;
     }
 
-    public void setIdOrder(UUID idOrder) {
+    public void setIdOrder(Long idOrder) {
         this.idOrder = idOrder;
     }
 

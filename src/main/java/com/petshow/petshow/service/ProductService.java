@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -27,16 +26,19 @@ public class ProductService {
         return repository.findAll();
     }
 
-    public ProductEntity getProduct(UUID id) {
+    public ProductEntity getProduct(Long id) {
         return repository.findById(id).orElseThrow(() -> new ProductNotFoundException(String.format("Product '%s' not found.", id)));
     }
 
-    public ProductEntity updateProduct(UUID id, ProductRequest productRequest) {
-        getProduct(id);
-        return saveProduct(productRequest);
+    public ProductEntity updateProduct(Long id, ProductRequest productRequest) {
+        var product = getProduct(id);
+        product.setName(productRequest.name());
+        product.setPrice(productRequest.price());
+        product.setDescription(productRequest.description());
+        return repository.save(product);
     }
 
-    public void deleteProduct(UUID id) {
+    public void deleteProduct(Long id) {
         ProductEntity product = getProduct(id);
         repository.delete(product);
     }

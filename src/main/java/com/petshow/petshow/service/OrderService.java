@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -33,20 +32,24 @@ public class OrderService {
 
     }
 
-    public OrderEntity getOrder(UUID id) {
+    public OrderEntity getOrder(Long id) {
 
         return repository.findById(id).orElseThrow(() -> new OrderNotFoundException(String.format("Order '%s' not found.", id)));
 
     }
 
-    public OrderEntity updateOrder(UUID id, OrderRequest request){
+    public OrderEntity updateOrder(Long id, OrderRequest request){
 
-        getOrder(id);
-        return saveOrder(request);
+        var order = getOrder(id);
+        order.setOrderDate(request.orderDate());
+        order.setDeliveryDate(request.deliveryDate());
+        order.setPaymentMethod(request.paymentMethod());
+        order.setTotalValue(request.totalValue());
+        return repository.save(order);
 
     }
 
-    public void deleteOrder(UUID id) {
+    public void deleteOrder(Long id) {
 
         OrderEntity order = this.getOrder(id);
         repository.delete(order);
