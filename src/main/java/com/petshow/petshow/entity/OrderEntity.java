@@ -35,4 +35,59 @@ public class OrderEntity {
     @Enumerated(EnumType.STRING)
     private StatusOrderEntity Entity;
 
+    public Long getIdOrder() {
+        return idOrder;
+    }
+
+    public void setIdOrder(Long idOrder) {
+        this.idOrder = idOrder;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
+    public BigDecimal getTotalValue() {
+        return totalValue;
+    }
+
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
+    }
+
+    public Date getDeliveryDate() {
+        return deliveryDate;
+    }
+
+    public void setDeliveryDate(Date deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public ProductEntity getProductList() {
+        return productList;
+    }
+
+    public void setProductList(ProductEntity productList) {
+        this.productList = productList;
+    }
+
+    public StatusOrderEntity getEntity() {
+        return Entity;
+    }
+
+    public void setEntity(StatusOrderEntity entity) {
+        Entity = entity;
+    }
 }
